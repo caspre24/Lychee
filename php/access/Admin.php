@@ -57,6 +57,11 @@ class Admin extends Access {
 			case 'Album::getArchive':		$this->getAlbumArchive(); break;
 			case 'Photo::getArchive':		$this->getPhotoArchive(); break;
 
+			# User functions
+			case 'Users::addUser':			$this->addUser(); break;
+			case 'Users::deleteUser':		$this->deleteUser(); break;
+			case 'Users::changePassword':	$this->changePassword(); break;
+
 			# Error
 			default:						exit('Error: Function not found! Please check the spelling of the called function.');
 											return false; break;
@@ -317,6 +322,30 @@ class Admin extends Access {
 		Module::dependencies(isset($_GET['photoID']));
 		$photo = new Photo($this->database, $this->plugins, null, $_GET['photoID']);
 		$photo->getArchive();
+
+	}
+
+	private function addUser(){
+
+		Module::dependencies(isset($_POST['username'], $_POST['password']));
+		$users = new Users($this->database);
+		echo $users->addUser($_POST['username'], $_POST['password'], 1);
+
+	}
+
+	private function deleteUser(){
+
+		Module::dependencies(isset($_POST['username'] ));
+		$users = new Users($this->database);
+		echo $users->deleteUser($_POST['username']);
+
+	}
+
+	private function changePassword(){
+
+		Module::dependencies(isset($_SESSION['username'], $_POST['oldPassword'], $_POST['newPassword'], $_POST['newPwRepeat'] ));
+		$users = new Users($this->database);
+		echo $users->changePassword( $_SESSION['username'], $_POST['oldPassword'], $_POST['newPassword'],$_POST['newPwRepeat']);
 
 	}
 
