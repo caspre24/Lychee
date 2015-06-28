@@ -57,10 +57,11 @@ class Admin extends Access {
 			case 'Album::getArchive':		$this->getAlbumArchive(); break;
 			case 'Photo::getArchive':		$this->getPhotoArchive(); break;
 
-			# User functions
-			case 'Users::addUser':			$this->addUser(); break;
-			case 'Users::deleteUser':		$this->deleteUser(); break;
-			case 'Users::changePassword':	$this->changePassword(); break;
+      # User functions
+      case 'Users::get':           $this->getUsers(); break;
+      case 'Users::addUser':       $this->addUser(); break;
+      case 'Users::deleteUser':    $this->deleteUser(); break;
+      case 'Users::changePassword':$this->changePassword(); break;
 
 			# Error
 			default:						exit('Error: Function not found! Please check the spelling of the called function.');
@@ -280,9 +281,8 @@ class Admin extends Access {
 	private function setLogin() {
 
 		Module::dependencies(isset($_POST['username'], $_POST['password']));
-		if (!isset($_POST['oldPassword'])) $_POST['oldPassword'] = '';
-		$this->settings = new Settings($this->database);
-		echo $this->settings->setLogin($_POST['oldPassword'], $_POST['username'], $_POST['password']);
+    $this->users = new Users($this->database);
+    echo $this->users->addUser($_POST['username'], $_POST['password'], 'admin');
 
 	}
 
@@ -325,28 +325,36 @@ class Admin extends Access {
 
 	}
 
-	private function addUser(){
+  private function addUser(){
 
-		Module::dependencies(isset($_POST['username'], $_POST['password']));
-		$users = new Users($this->database);
-		echo $users->addUser($_POST['username'], $_POST['password'], 1);
+      Module::dependencies(isset($_POST['username'], $_POST['password']));
+      $users = new Users($this->database);
+      echo $users->addUser($_POST['username'], $_POST['password'], 'admin');
+  
+  }
 
-	}
+  private function deleteUser(){
 
-	private function deleteUser(){
+      Module::dependencies(isset($_POST['username'] ));
+      $users = new Users($this->database);
+      echo $users->deleteUser($_POST['username']);
 
-		Module::dependencies(isset($_POST['username'] ));
-		$users = new Users($this->database);
-		echo $users->deleteUser($_POST['username']);
+  }
 
-	}
+  private function changePassword(){
 
-	private function changePassword(){
+      Module::dependencies(isset($_SESSION['username'], $_POST['oldPassword'], $_POST['newPassword'], $_POST['newPwRepeat'] ));
+      $users = new Users($this->database);
+      echo $users->changePassword( $_SESSION['username'], $_POST['oldPassword'], $_POST['newPassword'],$_POST['newPwRepeat']);
 
-		Module::dependencies(isset($_SESSION['username'], $_POST['oldPassword'], $_POST['newPassword'], $_POST['newPwRepeat'] ));
-		$users = new Users($this->database);
-		echo $users->changePassword( $_SESSION['username'], $_POST['oldPassword'], $_POST['newPassword'],$_POST['newPwRepeat']);
+  }
 
-	}
+  private function getUsers(){
+
+      $username = (isset($_POST['username'])) ? $_POST['username'] : '';
+      $users = new Users($this->database);
+      echo $users->get($username);
+
+  }
 
 }
