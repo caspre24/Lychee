@@ -60,6 +60,7 @@ contextMenu.settings = function(e) {
         { type: 'item', title: build.iconic('account-logout') + 'Sign Out', fn: lychee.logout }
       ]; 
   }
+  console.log("hej" + lychee.role);
 
 	basicContext.show(items, e);
 

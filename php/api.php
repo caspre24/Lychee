@@ -63,8 +63,17 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 	if (isset($_POST['function']))	$fn = $_POST['function'];
 	else							$fn = $_GET['function'];
 
-	if ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&
-		(isset($_SESSION['identifier'])&&$_SESSION['identifier']===$settings['identifier']) && isset($_SESSION['role']) && $_SESSION['role'] ==='admin') {
+  error_log($_SESSION['login']. " " . $_SESSION['identifier'] . " " . $_SESSION['role'] . " ". $settings['identifier'] );
+
+  $login = $_SESSION['login'];
+  $id = $_SESSION['identifier'];
+  $role = $_SESSION['role'];
+
+  // Spoecial case when the id in the session is "", this is when the identifier has not yet been created (since its created in a database update script which is run in session::init)
+  if ((isset($login) && $login === true) && 
+     ($id === "" || (isset($id) && $id === $settings['identifier'])) && 
+      (isset($role) && $role === "admin"))
+  {
 
 		###
 		# Admin Access
@@ -76,8 +85,10 @@ if (!empty($_POST['function'])||!empty($_GET['function'])) {
 		$admin = new Admin($database, $plugins, $settings);
 		$admin->check($fn);
 
-  }else if ((isset($_SESSION['login'])&&$_SESSION['login']===true)&&
-		(isset($_SESSION['identifier'])&&$_SESSION['identifier']===$settings['identifier']) && isset($_SESSION['role']) &&$_SESSION['role'] ==='user') {
+  }else if ((isset($login) && $login === true) && 
+      ((isset($id) && $id === $settings['identifier'])) && 
+      (isset($role) && $role === "user"))
+  {
 
 		###
 		# User Access

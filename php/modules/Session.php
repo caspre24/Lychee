@@ -152,6 +152,7 @@ class Session extends Module {
 		if($result->num_rows === 0) {
 				$_SESSION['login']		= true;
 				$_SESSION['identifier']	= $this->settings['identifier'];
+				$_SESSION['role']	= 'admin';
 				return true;
 		}
     /*

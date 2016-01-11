@@ -65,7 +65,11 @@ lychee.init = function() {
       */
 
 			// Show dialog when there is no username and password
-			if (data.config.login===false) settings.createLogin();
+			if (data.config.login===false){
+          lychee.role = "admin";
+          settings.createLogin();
+          return;
+      }
 
 		} else if (data.status===1) {
 
