@@ -10,6 +10,7 @@
 @ini_set('upload_max_size', '200M');
 @ini_set('upload_max_filesize', '20M');
 @ini_set('max_file_uploads', '100');
+@ini_set('display_errors', '0');
 
 if (!empty($_POST['function'])||!empty($_GET['function'])) {
 
