@@ -33,7 +33,7 @@ class Users extends Module {
       }
       $result = $this->database->query($query);
 
-      $data = [];
+      $data = array();
       while($row = $result->fetch_assoc()){
         $data[] = $row;
       }
@@ -162,7 +162,7 @@ class Users extends Module {
           return false;
       }
 
-      $data = [];
+      $data = array();
       while($row = $result->fetch_assoc()){
         $data[] = $row;
       }
